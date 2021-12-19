@@ -1,5 +1,8 @@
 # xcept
 
+[![PyPI version](https://badge.fury.io/py/xcept.svg)](https://badge.fury.io/py/xcept)
+[![GitHub license](https://img.shields.io/github/license/Abstract-X/xcept)](https://github.com/Abstract-X/xcept/blob/main/LICENSE)
+
 **xcept** is a package for the convenience of creating exceptions.
 
 ---
