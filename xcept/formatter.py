@@ -4,6 +4,12 @@ from xcept import errors
 
 
 class Formatter(string.Formatter):
+    """Formatter for generating exception messages."""
+
+    def __init__(self, allow_unused_args: bool):
+
+        super().__init__()
+        self._allow_unused_args = allow_unused_args
 
     def parse(self, format_string):
 
@@ -16,8 +22,9 @@ class Formatter(string.Formatter):
 
     def check_unused_args(self, used_args, args, kwargs) -> None:
 
-        for kwarg in kwargs:
-            if kwarg not in used_args:
-                raise errors.UnusedKeywordArgumentError(
-                    f"keyword argument {kwarg!r} is not used!", argument=kwarg
-                ) from None
+        if not self._allow_unused_args:
+            for kwarg in kwargs:
+                if kwarg not in used_args:
+                    raise errors.UnusedKeywordArgumentError(
+                        f"keyword argument {kwarg!r} is not used!", argument=kwarg
+                    ) from None

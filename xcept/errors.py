@@ -22,3 +22,11 @@ class UnusedKeywordArgumentError(BaseError):
 
         super().__init__(message=message)
         self.argument = argument
+
+
+class ArgsMatchingError(BaseError):
+
+    def __init__(self, message, arg):
+
+        super().__init__(message=message)
+        self.arg = arg
