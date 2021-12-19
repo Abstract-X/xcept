@@ -46,6 +46,6 @@ class BaseException_(Exception):
         try:
             self._get_message()
         except KeyError as error:
-            attr = error.args[0]
-            raise errors.ArgsMatchingError(f"attribute {attr!r} specified in template "
-                                           "was not found among the attributes!", arg=attr) from None
+            arg = error.args[0]
+            raise errors.ArgsMatchingError(f"argument {arg!r} specified in template "
+                                           "was not found among the attributes!", arg=arg) from None
