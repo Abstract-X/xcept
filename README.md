@@ -57,8 +57,9 @@ ExampleException("error {bar}!", foo="test", bar=12345)
 
 If you don't want to have a detailed message, you can define `ALLOW_UNUSED_ARGS = True`:
 ```python3
-from xcept import BaseException_
 from dataclasses import dataclass
+
+from xcept import BaseException_
 
 
 @dataclass
