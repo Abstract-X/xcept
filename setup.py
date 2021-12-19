@@ -13,12 +13,22 @@ def get_long_description() -> str:
 
 setuptools.setup(
     name="xcept",
-    version="0.1.0",
-    packages=setuptools.find_packages(exclude=("tests", "docs")),
+    version="1.0.0",
+    packages=setuptools.find_packages(exclude=("tests",)),
     url="https://github.com/Abstract-X/xcept",
     author="Abstract-X",
     author_email="abstract-x-mail@protonmail.com",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    python_requires='>=3.8'
+    python_requires='>=3.7',
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Operating System :: OS Independent",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11"
+    ]
 )
