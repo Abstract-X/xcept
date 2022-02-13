@@ -3,7 +3,6 @@ from pathlib import Path
 
 
 def get_long_description() -> str:
-
     path = Path(__file__).parent / "README.md"
     with open(str(path), encoding="UTF-8") as stream:
         long_description = stream.read()
@@ -13,7 +12,7 @@ def get_long_description() -> str:
 
 setuptools.setup(
     name="xcept",
-    version="1.0.1",
+    version="2.0.0",
     packages=setuptools.find_packages(exclude=("tests",)),
     url="https://github.com/Abstract-X/xcept",
     author="Abstract-X",
