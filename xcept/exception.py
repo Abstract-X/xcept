@@ -19,6 +19,9 @@ class Exception_(Exception):
     def __str__(self):
         return self._get_message()
 
+    def get_template(self) -> str:
+        return self.template_
+
     def _get_formatting_attrs(self) -> dict:
         attrs = {}
         for key, value in vars(self).items():
@@ -28,7 +31,7 @@ class Exception_(Exception):
         return attrs
 
     def _get_message(self) -> str:
-        return self._formatter.format(self.template_, **self._get_formatting_attrs())
+        return self._formatter.format(self.get_template(), **self._get_formatting_attrs())
 
     def _check_args_matching(self) -> None:
         try:
