@@ -24,6 +24,7 @@ class Exception_(Exception):
 
     def _get_formatting_attrs(self) -> dict:
         attrs = {}
+
         for key, value in vars(self).items():
             if key not in _NON_FORMATTING_ATTRS:
                 attrs[key] = value
@@ -38,6 +39,7 @@ class Exception_(Exception):
             self._get_message()
         except KeyError as error:
             arg = error.args[0]
+
             raise errors.ArgMatchingError(
                 f"argument {arg!r} specified in template was not found among the attributes!",
                 arg=arg
