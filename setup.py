@@ -4,7 +4,8 @@ from pathlib import Path
 
 def get_long_description() -> str:
     path = Path(__file__).parent / "README.md"
-    with open(str(path), encoding="UTF-8") as stream:
+
+    with path.open(encoding="UTF-8") as stream:
         long_description = stream.read()
 
     return long_description

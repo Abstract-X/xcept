@@ -1,46 +1,83 @@
+import dataclasses
 from dataclasses import dataclass, field
+from typing import Set
+import warnings
 
-from xcept.formatter import Formatter
-from xcept import errors
-
-
-_NON_FORMATTING_ATTRS = {"template_", "_formatter"}
+from xcept.formatter.formatter import Formatter
+from xcept.warnings import MissingFieldWarning, UnknownFieldWarning
+from xcept.errors import PositionalArgumentError
 
 
 @dataclass
-class Exception_(Exception):
-    ALLOW_UNUSED_ARGS = False
-    template_: str = field(repr=False)
+class Exception_(Exception):  # noqa
+    ALL_REPLACEMENT_FIELDS_IS_REQUIRED = True
+    _template: str = field(repr=False, metadata={"is_template": True})
 
     def __post_init__(self):
-        self._formatter = Formatter(allow_unused_args=self.ALLOW_UNUSED_ARGS)
-        self._check_args_matching()
+        self._fields = {
+            i.name
+            for i in dataclasses.fields(self)
+            if not i.metadata.get("is_template")
+        }
+        self._formatter = Formatter()
+
+        if self._formatter.check_positional_fields(self._template):
+            raise PositionalArgumentError("Only keyword fields can be used in a template!")
+
+        replacement_fields = self._formatter.get_keyword_fields(self._template)
+
+        if self.ALL_REPLACEMENT_FIELDS_IS_REQUIRED:
+            _warn_about_missing_replacement_fields(
+                fields={i for i in self._fields if i not in replacement_fields},
+                template=self._template
+            )
+
+        _warn_about_unknown_replacement_fields(
+            fields={i for i in replacement_fields if i not in self._fields},
+            template=self._template
+        )
 
     def __str__(self):
-        return self._get_message()
+        return self.get_message()
 
-    def get_template(self) -> str:
-        return self.template_
+    def get_message(self) -> str:
+        arguments = {
+            name: value
+            for name, value in vars(self).items()
+            if name in self._fields
+        }
 
-    def _get_formatting_attrs(self) -> dict:
-        attrs = {}
+        return self._formatter.get_string(self._template, **arguments)
 
-        for key, value in vars(self).items():
-            if key not in _NON_FORMATTING_ATTRS:
-                attrs[key] = value
 
-        return attrs
+def _warn_about_missing_replacement_fields(fields: Set[str], template: str) -> None:
+    if fields:
+        warnings.warn(
+            message=MissingFieldWarning(
+                f"No the replacement {_get_field_message_part(fields)} "
+                f"in the template {template!r}!"
+            ),
+            stacklevel=4
+        )
 
-    def _get_message(self) -> str:
-        return self._formatter.format(self.get_template(), **self._get_formatting_attrs())
 
-    def _check_args_matching(self) -> None:
-        try:
-            self._get_message()
-        except KeyError as error:
-            arg = error.args[0]
+def _warn_about_unknown_replacement_fields(fields: Set[str], template: str) -> None:
+    if fields:
+        warnings.warn(
+            message=UnknownFieldWarning(
+                f"Unknown the replacement {_get_field_message_part(fields)} "
+                f"in the template {template!r}!"
+            ),
+            stacklevel=4
+        )
 
-            raise errors.ArgMatchingError(
-                f"argument {arg!r} specified in template was not found among the attributes!",
-                arg=arg
-            ) from None
+
+def _get_field_message_part(fields: Set[str]) -> str:
+    if len(fields) == 1:
+        message_part = f"field {''.join(fields)!r}"
+    elif len(fields) > 1:
+        message_part = f"fields {', '.join(repr(i) for i in fields)}"
+    else:
+        raise ValueError("No fields!")
+
+    return message_part
