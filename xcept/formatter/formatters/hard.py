@@ -13,7 +13,7 @@ class HardFormatter(Formatter):
             expression = i[1]
 
             if expression:
-                field = get_field_from_expression(expression)
+                field, _ = get_field_from_expression(expression)
 
                 if not field.isdigit():
                     fields.add(field)
@@ -25,7 +25,7 @@ class HardFormatter(Formatter):
             expression = i[1]
 
             if expression is not None:
-                field = get_field_from_expression(expression)
+                field, _ = get_field_from_expression(expression)
 
                 if (field == "") or field.isdigit():
                     return True

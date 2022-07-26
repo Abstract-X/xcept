@@ -80,5 +80,49 @@ pytest_message_parametrize = pytest.mark.parametrize(
 
         # Multiple replacement
         ("{test_field} {test_field[0].real}", [123.45], "[123.45] 123.45"),
+
+        # Unknown field
+        ("{test_field} {unknown_field}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!s} {unknown_field!s}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!r} {unknown_field!r}", "foo", "'foo' <UNKNOWN>"),
+        ("{test_field!a} {unknown_field!a}", "foo", "'foo' <UNKNOWN>"),
+
+        # Equal sign expression
+        ("{test_field=}", 12345, "test_field=12345"),
+        ("{test_field=}", 123.45, "test_field=123.45"),
+        ("{test_field=}", "foo", "test_field='foo'"),
+        ("{test_field=} {unknown_field=}", "foo", "test_field='foo' unknown_field=<UNKNOWN>"),
+
+        # Several unknown fields in a row
+        (
+            "{unknown_field_1} {unknown_field_2} {test_field}",
+            "foo",
+            "<UNKNOWN> <UNKNOWN> foo"
+        ),
+        (
+            "{unknown_field_1!s} {unknown_field_2!r} {unknown_field_3!a} {test_field}",
+            "foo",
+            "<UNKNOWN> <UNKNOWN> <UNKNOWN> foo"
+        ),
+        (
+            "{unknown_field_1=} {unknown_field_2=} {test_field=}",
+            "foo",
+            "unknown_field_1=<UNKNOWN> unknown_field_2=<UNKNOWN> test_field='foo'"
+        ),
+        (
+            "{test_field} {unknown_field_1} {unknown_field_2}",
+            "foo",
+            "foo <UNKNOWN> <UNKNOWN>"
+        ),
+        (
+            "{test_field} {unknown_field_1!s} {unknown_field_2!r} {unknown_field_3!a}",
+            "foo",
+            "foo <UNKNOWN> <UNKNOWN> <UNKNOWN>"
+        ),
+        (
+            "{test_field=} {unknown_field_1=} {unknown_field_2=}",
+            "foo",
+            "test_field='foo' unknown_field_1=<UNKNOWN> unknown_field_2=<UNKNOWN>"
+        )
     )
 )
