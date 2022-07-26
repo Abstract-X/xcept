@@ -4,5 +4,5 @@ class XceptError(Exception):
     pass
 
 
-class PositionalArgumentError(XceptError):
+class PositionalFieldError(XceptError):
     pass

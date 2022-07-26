@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import pytest
 
 from xcept import Exception_
-from xcept.errors import PositionalArgumentError
+from xcept.errors import PositionalFieldError
 from xcept.warnings import MissingFieldWarning, UnknownFieldWarning
 
 
@@ -24,7 +24,7 @@ from xcept.warnings import MissingFieldWarning, UnknownFieldWarning
     )
 )
 def test_template_with_positional_replacement_fields(template: str) -> None:
-    with pytest.raises(PositionalArgumentError):
+    with pytest.raises(PositionalFieldError):
         Exception_(template)
 
 
