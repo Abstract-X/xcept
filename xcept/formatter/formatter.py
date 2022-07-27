@@ -13,8 +13,5 @@ class Formatter:
     def get_string(self, template: str, **kwargs) -> str:
         return SoftFormatter(set(kwargs)).format(template, **kwargs)
 
-    def get_keyword_fields(self, template: str) -> Set[str]:
-        return self._hard_formatter.get_keyword_fields(template)
-
-    def check_positional_fields(self, template: str) -> bool:
-        return self._hard_formatter.check_positional_fields(template)
+    def get_fields(self, template: str) -> Set[str]:
+        return self._hard_formatter.get_fields(template)

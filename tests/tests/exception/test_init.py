@@ -3,29 +3,7 @@ from dataclasses import dataclass
 import pytest
 
 from xcept import Exception_
-from xcept.errors import PositionalFieldError
 from xcept.warnings import MissingFieldWarning, UnknownFieldWarning
-
-
-@pytest.mark.parametrize(
-    ("template",),
-    (
-        # Without index
-        ("{}",),
-        ("{!r}",),
-        ("{:.2f}",),
-
-        # With index
-        ("{0}",),
-        ("{0!r}",),
-        ("{0:.2f}",),
-        ("{0[0]}",),
-        ("{0.attribute}",)
-    )
-)
-def test_template_with_positional_replacement_fields(template: str) -> None:
-    with pytest.raises(PositionalFieldError):
-        Exception_(template)
 
 
 @pytest.mark.parametrize(
@@ -49,6 +27,19 @@ def test_template_with_missing_replacement_fields(template: str) -> None:
 @pytest.mark.parametrize(
     ("template",),
     (
+        # Positional field without index
+        ("{}",),
+        ("{!r}",),
+        ("{:.2f}",),
+
+        # Positional field with index
+        ("{0}",),
+        ("{0!r}",),
+        ("{0:.2f}",),
+        ("{0[0]}",),
+        ("{0.attribute}",),
+
+        # Keyword field
         ("{test_field} {unknown_field}",),
         ("{test_field} {unknown_field!r}",),
         ("{test_field} {unknown_field:.2f}",),

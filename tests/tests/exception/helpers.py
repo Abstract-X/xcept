@@ -86,6 +86,14 @@ pytest_message_parametrize = pytest.mark.parametrize(
         ("{test_field!s} {unknown_field!s}", "foo", "foo <UNKNOWN>"),
         ("{test_field!r} {unknown_field!r}", "foo", "'foo' <UNKNOWN>"),
         ("{test_field!a} {unknown_field!a}", "foo", "'foo' <UNKNOWN>"),
+        ("{test_field} {}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!s} {!s}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!r} {!r}", "foo", "'foo' <UNKNOWN>"),
+        ("{test_field!a} {!a}", "foo", "'foo' <UNKNOWN>"),
+        ("{test_field} {0}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!s} {0!s}", "foo", "foo <UNKNOWN>"),
+        ("{test_field!r} {0!r}", "foo", "'foo' <UNKNOWN>"),
+        ("{test_field!a} {0!a}", "foo", "'foo' <UNKNOWN>"),
 
         # Equal sign expression
         ("{test_field=}", 12345, "test_field=12345"),

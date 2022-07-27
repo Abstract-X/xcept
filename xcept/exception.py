@@ -5,7 +5,6 @@ import warnings
 
 from xcept.formatter.formatter import Formatter
 from xcept.warnings import MissingFieldWarning, UnknownFieldWarning
-from xcept.errors import PositionalFieldError
 
 
 @dataclass
@@ -20,11 +19,7 @@ class Exception_(Exception):  # noqa
             if not i.metadata.get("is_template")
         }
         self._formatter = Formatter()
-
-        if self._formatter.check_positional_fields(self._template):
-            raise PositionalFieldError("Only keyword fields can be used in a template!")
-
-        replacement_fields = self._formatter.get_keyword_fields(self._template)
+        replacement_fields = self._formatter.get_fields(self._template)
 
         if self.ALL_REPLACEMENT_FIELDS_IS_REQUIRED:
             _warn_about_missing_replacement_fields(
