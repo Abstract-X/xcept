@@ -137,7 +137,7 @@ a_value
 a='a_value'
 ```
 
-If a template does not contain all replacement fields, the `MissingFieldWarning` occurs:
+If a message template does not contain all replacement fields and all replacement fields is required, the `MissingFieldWarning` occurs:
 
 ```python3
 >>> error = FooError("Error!", a="value")
@@ -166,7 +166,7 @@ Traceback (most recent call last):
 __main__.SomeError: Error (a='a_value')!
 ```
 
-If a template contains unknown replacement fields, the `UnknownFieldWarning` occurs and the value is set to `<UNKNOWN>`:
+If a message template contains unknown replacement fields, the `UnknownFieldWarning` occurs and the value is set to `<UNKNOWN>`:
 
 ```python3
 >>> error = FooError("Error ({a=}, {b=}, {c=})!", a="a_value")
@@ -175,4 +175,29 @@ If a template contains unknown replacement fields, the `UnknownFieldWarning` occ
 Traceback (most recent call last):
   File "<input>", line 1
 __main__.FooError: Error (a='a_value', b=<UNKNOWN>, c=<UNKNOWN>)!
+```
+
+If there is no a message template and all replacement fields is required, the `MissingTemplateWarning` occurs:
+
+```python3
+>>> @dataclass
+... class SomeError(Exception_):
+...     pass
+...
+>>> error = SomeError(None)  # Message template is None
+<input>:1: MissingTemplateWarning: No a template (SomeError)!
+```
+
+You can set a default message template:
+
+```python3
+>>> @dataclass
+... class SomeError(Exception_):
+...     DEFAULT_TEMPLATE = "Default message template ({a=})!"
+...     a: str
+...
+>>> raise SomeError(None, a="a_value")  # Message template is None
+Traceback (most recent call last):
+  File "<input>", line 1
+__main__.SomeError: Default message template (a='a_value')!
 ```
