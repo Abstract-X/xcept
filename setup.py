@@ -6,9 +6,7 @@ def get_long_description() -> str:
     path = Path(__file__).parent / "README.md"
 
     with path.open(encoding="UTF-8") as stream:
-        long_description = stream.read()
-
-    return long_description
+        return stream.read()
 
 
 setuptools.setup(
