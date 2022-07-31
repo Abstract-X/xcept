@@ -11,7 +11,7 @@ def get_long_description() -> str:
 
 setuptools.setup(
     name="xcept",
-    version="3.0.0",
+    version="3.1.0",
     packages=setuptools.find_packages(exclude=("tests",)),
     url="https://github.com/Abstract-X/xcept",
     author="Abstract-X",
