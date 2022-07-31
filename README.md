@@ -36,7 +36,7 @@ class BarError(Error):  # Concrete error class
 ```
 
 It looks pretty simple.
-Let's try to create an exception with arguments:
+Let's try to create exceptions with arguments:
 
 ```python3
 class Error(Exception):
