@@ -141,13 +141,13 @@ If a template does not contain all replacement fields, the `MissingFieldWarning`
 
 ```python3
 >>> error = FooError("Error!", a="value")
-<input>:1: MissingFieldWarning: No the replacement field 'a' in the template 'Error!'!
+<input>:1: MissingFieldWarning: No the replacement field 'a' in the template 'Error!' (FooError)!
 >>>
 >>> error = BarError("Error ({b=})!", b="value", c="value")
-<input>:1: MissingFieldWarning: No the replacement field 'c' in the template 'Error ({b=})!'!
+<input>:1: MissingFieldWarning: No the replacement field 'c' in the template 'Error ({b=})!' (BarError)!
 >>>
 >>> error = BarError("Error!", b="value", c="value")
-<input>:1: MissingFieldWarning: No the replacement fields 'b', 'c' in the template 'Error!'!
+<input>:1: MissingFieldWarning: No the replacement fields 'b', 'c' in the template 'Error!' (BarError)!
 ```
 
 If for some reason you don't need to include all attributes in a message, define `ALL_REPLACEMENT_FIELDS_IS_REQUIRED = False` (default `True`) to disable checks and warnings:
@@ -170,7 +170,7 @@ If a template contains unknown replacement fields, the `UnknownFieldWarning` occ
 
 ```python3
 >>> error = FooError("Error ({a=}, {b=}, {c=})!", a="a_value")
-<input>:1: UnknownFieldWarning: Unknown the replacement fields 'b', 'c' in the template 'Error ({a=}, {b=}, {c=})!'!
+<input>:1: UnknownFieldWarning: Unknown the replacement fields 'b', 'c' in the template 'Error ({a=}, {b=}, {c=})!' (FooError)!
 >>> raise error
 Traceback (most recent call last):
   File "<input>", line 1
