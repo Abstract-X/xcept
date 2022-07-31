@@ -39,16 +39,19 @@ class Exception_(Exception):  # noqa
         }
         self._formatter = Formatter()
         replacement_fields = self._formatter.get_fields(self._template)
+        class_name = type(self).__name__
 
         if self.ALL_REPLACEMENT_FIELDS_IS_REQUIRED:
             _warn_about_missing_replacement_fields(
                 fields={i for i in self._fields if i not in replacement_fields},
-                template=self._template
+                template=self._template,
+                class_name=class_name
             )
 
         _warn_about_unknown_replacement_fields(
             fields={i for i in replacement_fields if i not in self._fields},
-            template=self._template
+            template=self._template,
+            class_name=class_name
         )
 
     def __str__(self):
@@ -66,23 +69,31 @@ class Exception_(Exception):  # noqa
         return self._formatter.get_string(self._template, **arguments)
 
 
-def _warn_about_missing_replacement_fields(fields: Set[str], template: str) -> None:
+def _warn_about_missing_replacement_fields(
+    fields: Set[str],
+    template: str,
+    class_name: str
+) -> None:
     if fields:
         warnings.warn(
             message=MissingFieldWarning(
                 f"No the replacement {_get_field_message_part(fields)} "
-                f"in the template {template!r}!"
+                f"in the template {template!r} ({class_name})!"
             ),
             stacklevel=4
         )
 
 
-def _warn_about_unknown_replacement_fields(fields: Set[str], template: str) -> None:
+def _warn_about_unknown_replacement_fields(
+    fields: Set[str],
+    template: str,
+    class_name: str
+) -> None:
     if fields:
         warnings.warn(
             message=UnknownFieldWarning(
                 f"Unknown the replacement {_get_field_message_part(fields)} "
-                f"in the template {template!r}!"
+                f"in the template {template!r} ({class_name})!"
             ),
             stacklevel=4
         )
