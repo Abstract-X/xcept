@@ -6,14 +6,12 @@ def get_long_description() -> str:
     path = Path(__file__).parent / "README.md"
 
     with path.open(encoding="UTF-8") as stream:
-        long_description = stream.read()
-
-    return long_description
+        return stream.read()
 
 
 setuptools.setup(
     name="xcept",
-    version="3.0.0",
+    version="3.1.0",
     packages=setuptools.find_packages(exclude=("tests",)),
     url="https://github.com/Abstract-X/xcept",
     author="Abstract-X",

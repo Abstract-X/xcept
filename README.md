@@ -36,7 +36,7 @@ class BarError(Error):  # Concrete error class
 ```
 
 It looks pretty simple.
-Let's try to create an exception with arguments:
+Let's try to create exceptions with arguments:
 
 ```python3
 class Error(Exception):
@@ -137,17 +137,17 @@ a_value
 a='a_value'
 ```
 
-If a template does not contain all replacement fields, the `MissingFieldWarning` occurs:
+If a message template does not contain all replacement fields and all replacement fields is required, the `MissingFieldWarning` occurs:
 
 ```python3
 >>> error = FooError("Error!", a="value")
-<input>:1: MissingFieldWarning: No the replacement field 'a' in the template 'Error!'!
+<input>:1: MissingFieldWarning: No the replacement field 'a' in the template 'Error!' (FooError)!
 >>>
 >>> error = BarError("Error ({b=})!", b="value", c="value")
-<input>:1: MissingFieldWarning: No the replacement field 'c' in the template 'Error ({b=})!'!
+<input>:1: MissingFieldWarning: No the replacement field 'c' in the template 'Error ({b=})!' (BarError)!
 >>>
 >>> error = BarError("Error!", b="value", c="value")
-<input>:1: MissingFieldWarning: No the replacement fields 'b', 'c' in the template 'Error!'!
+<input>:1: MissingFieldWarning: No the replacement fields 'b', 'c' in the template 'Error!' (BarError)!
 ```
 
 If for some reason you don't need to include all attributes in a message, define `ALL_REPLACEMENT_FIELDS_IS_REQUIRED = False` (default `True`) to disable checks and warnings:
@@ -166,13 +166,38 @@ Traceback (most recent call last):
 __main__.SomeError: Error (a='a_value')!
 ```
 
-If a template contains unknown replacement fields, the `UnknownFieldWarning` occurs and the value is set to `<UNKNOWN>`:
+If a message template contains unknown replacement fields, the `UnknownFieldWarning` occurs and the value is set to `<UNKNOWN>`:
 
 ```python3
 >>> error = FooError("Error ({a=}, {b=}, {c=})!", a="a_value")
-<input>:1: UnknownFieldWarning: Unknown the replacement fields 'b', 'c' in the template 'Error ({a=}, {b=}, {c=})!'!
+<input>:1: UnknownFieldWarning: Unknown the replacement fields 'b', 'c' in the template 'Error ({a=}, {b=}, {c=})!' (FooError)!
 >>> raise error
 Traceback (most recent call last):
   File "<input>", line 1
 __main__.FooError: Error (a='a_value', b=<UNKNOWN>, c=<UNKNOWN>)!
+```
+
+If there is no a message template and all replacement fields is required, the `MissingTemplateWarning` occurs:
+
+```python3
+>>> @dataclass
+... class SomeError(Exception_):
+...     pass
+...
+>>> error = SomeError(None)  # Message template is None
+<input>:1: MissingTemplateWarning: No a template (SomeError)!
+```
+
+You can set a default message template:
+
+```python3
+>>> @dataclass
+... class SomeError(Exception_):
+...     DEFAULT_TEMPLATE = "Default message template ({a=})!"
+...     a: str
+...
+>>> raise SomeError(None, a="a_value")  # Message template is None
+Traceback (most recent call last):
+  File "<input>", line 1
+__main__.SomeError: Default message template (a='a_value')!
 ```
